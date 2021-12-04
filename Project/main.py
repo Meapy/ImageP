@@ -1,4 +1,3 @@
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +14,7 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 
 
 # create a function to extract text from image using pytesseract and put it into a txt file
-def extract_text(img, invert):
+def setup_image(img):
     # convert the image to gray scale
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = gray
@@ -23,14 +22,20 @@ def extract_text(img, invert):
     ret, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     # write the image into a temporary file
     cv2.imwrite("data/output/temp.png", img)
-    # read the text from the image
-    text = pytesseract.image_to_string(cv2.imread("data/output/temp.png"))
-    # print the text
-    print(text)
-    # write the text into a txt file
-    f = open("data/output/tester.txt", "w")
-    f.close()
     return img
+
+# Read in image
+img1 = setup_image(img)
+
+# Pytesseract
+d = pytesseract.image_to_data(img1, output_type=Output.DICT)
+text = pytesseract.image_to_string(img1)
+f = open("data/output/tester.txt", "w")
+f.write(text)
+f.close()
+words = text.split()
+for i in range(len(words)):  # make all the words into lower case for matching
+    words[i] = words[i].lower()
 
 
 # Remove words-text.csv & words-boxs.csv
@@ -39,15 +44,6 @@ if os.path.exists("words-text.csv"):
 if os.path.exists("words-boxs.csv"):
     os.remove('words-boxs.csv')
 
-# Read in image
-img1 = extract_text(img, False)
-
-# Pytesseract
-d = pytesseract.image_to_data(img1, output_type=Output.DICT)
-text = pytesseract.image_to_string(img1)
-words = text.split()
-for i in range(len(words)):  ## make all the words into lower case for matching
-    words[i] = words[i].lower()
 
 # Creating words-text.csv ( Contains all words that are found)
 k = 0
