@@ -2,15 +2,19 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import pytesseract
+import easygui
 from pytesseract import Output
 import csv
 import random
 from csv import writer
 import os
 
-# C:\Program Files\Tesseract-OCR
-img = cv2.imread('data/letter1.jpg')
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
+
+f = easygui.fileopenbox(filetypes=["*.jpg","*.jpeg","*.png"])
+img = cv2.imread(f)
+
+#if on windows, uncomment this line:
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
 
 # create a function to extract text from image using pytesseract and put it into a txt file
@@ -31,7 +35,7 @@ img1 = setup_image(img)
 # Pytesseract
 d = pytesseract.image_to_data(img1, output_type=Output.DICT)
 text = pytesseract.image_to_string(img1)
-f = open("data/output/tester.txt", "w")
+f = open("data/output/tester.txt", "w+")
 f.write(text)
 f.close()
 words = text.split()
