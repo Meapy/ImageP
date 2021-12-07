@@ -24,6 +24,7 @@ def setup_image(img):
     cv2.imwrite("data/output/temp.png", img)
     return img
 
+
 # Read in image
 img1 = setup_image(img)
 
@@ -37,13 +38,11 @@ words = text.split()
 for i in range(len(words)):  # make all the words into lower case for matching
     words[i] = words[i].lower()
 
-
 # Remove words-text.csv & words-boxs.csv
 if os.path.exists("words-text.csv"):
     os.remove('words-text.csv')
 if os.path.exists("words-boxs.csv"):
     os.remove('words-boxs.csv')
-
 
 # Creating words-text.csv ( Contains all words that are found)
 k = 0
@@ -107,6 +106,7 @@ with open('words-boxs.csv', 'r') as f:
             print(i, value)
 
 cv2.imwrite("data/output/output.png", img)
+img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
 cv2.imshow('censored.png', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
