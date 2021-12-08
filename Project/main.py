@@ -14,7 +14,7 @@ f = easygui.fileopenbox(filetypes=["*.jpg","*.jpeg","*.png"])
 img = cv2.imread(f)
 
 #if on windows, uncomment this line:
-#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
 
 # create a function to extract text from image using pytesseract and put it into a txt file
@@ -24,7 +24,7 @@ def setup_image(img):
     img = gray
     # apply a thrshold to get image with only b&w (binarization)
     ret, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    # write the image into a temporary file
+    # save the thresh holded image
     cv2.imwrite("data/output/temp.png", img)
     return img
 
@@ -35,7 +35,7 @@ img1 = setup_image(img)
 # Pytesseract
 d = pytesseract.image_to_data(img1, output_type=Output.DICT)
 text = pytesseract.image_to_string(img1)
-f = open("data/output/tester.txt", "w+")
+f = open("data/output/text_output.txt", "w+")
 f.write(text)
 f.close()
 words = text.split()
@@ -110,7 +110,7 @@ with open('words-boxs.csv', 'r') as f:
             print(i, value)
 
 cv2.imwrite("data/output/output.png", img)
-img = cv2.resize(img, (0,0), fx=0.5, fy=0.5)
+img = cv2.resize(img, (0,0), fx=0.75, fy=0.75)
 cv2.imshow('censored.png', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
